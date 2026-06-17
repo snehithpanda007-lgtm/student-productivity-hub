@@ -1,38 +1,66 @@
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import TaskSection from "./components/TaskSection";
-import Footer from "./components/Footer";
-import TaskCard from "./components/TaskCard";
+import { useState } from "react";
 
 function App() {
+  const [task, setTask] = useState("");
+  const [tasks, setTasks] = useState([]);
+
+  const addTask = () => {
+    if (!task.trim()) return;
+
+    setTasks([
+      ...tasks,
+      {
+        id: Date.now(),
+        text: task,
+        completed: false,
+      },
+    ]);
+
+    setTask("");
+  };
+
+  const toggleTask = (id) => {
+    setTasks(
+      tasks.map((t) =>
+        t.id === id
+          ? { ...t, completed: !t.completed }
+          : t
+      )
+    );
+  };
+
   return (
-    <>
-      <Navbar />
-      <Hero />
-      <TaskSection />
-      <Footer />
     <div>
-      <h1>Task Manager</h1>
+      <h1>Task List</h1>
 
-      <TaskCard
-        title="Learn React"
-        status="In Progress"
-        priority="High"
+      <input
+        type="text"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        placeholder="Enter task"
       />
 
-      <TaskCard
-        title="Build Portfolio"
-        status="Pending"
-        priority="Medium"
-      />
+      <button onClick={addTask}>
+        Add Task
+      </button>
 
-      <TaskCard
-        title="Practice JSX"
-        status="Completed"
-        priority="Low"
-      />
+      <ul>
+        {tasks.map((t) => (
+          <li
+            key={t.id}
+            onClick={() => toggleTask(t.id)}
+            style={{
+              cursor: "pointer",
+              textDecoration: t.completed
+                ? "line-through"
+                : "none",
+            }}
+          >
+            {t.text}
+          </li>
+        ))}
+      </ul>
     </div>
-    </>
   );
 }
 
