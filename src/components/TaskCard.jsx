@@ -1,16 +1,50 @@
-function TaskCard({ title, status, priority }) {
+function TaskCard({
+  task,
+  onDelete,
+  onToggle,
+}) {
   return (
     <div
       style={{
-        border: "1px solid gray",
-        padding: "10px",
-        margin: "10px",
-        borderRadius: "8px"
+        border: "1px solid #ccc",
+        padding: "15px",
+        marginBottom: "10px",
+        borderRadius: "8px",
       }}
     >
-      <h2>{title}</h2>
-      <p>Status: {status}</p>
-      <p>Priority: {priority}</p>
+      <h3
+        style={{
+          textDecoration: task.completed
+            ? "line-through"
+            : "none",
+        }}
+      >
+        {task.title}
+      </h3>
+
+      <p>Category: {task.category}</p>
+
+      <p>
+        Status:
+        {task.completed
+          ? " ✅ Completed"
+          : " ⏳ Pending"}
+      </p>
+
+      <button
+        onClick={() => onToggle(task.id)}
+      >
+        Toggle
+      </button>
+
+      <button
+        onClick={() => onDelete(task.id)}
+        style={{
+          marginLeft: "10px",
+        }}
+      >
+        Delete
+      </button>
     </div>
   );
 }

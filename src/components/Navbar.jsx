@@ -1,7 +1,13 @@
 function Navbar() {
   return (
-    <nav>
-      <h1>Student Productivity Hub</h1>
+    <nav
+      style={{
+        background: "#2563eb",
+        color: "white",
+        padding: "15px",
+      }}
+    >
+      <h2>Student Productivity Hub</h2>
     </nav>
   );
 }
