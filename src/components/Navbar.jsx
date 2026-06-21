@@ -1,15 +1,11 @@
-function Navbar() {
+export default function Navbar() {
   return (
-    <nav
-      style={{
-        background: "#2563eb",
-        color: "white",
-        padding: "15px",
-      }}
-    >
-      <h2>Student Productivity Hub</h2>
+    <nav className="bg-blue-600 text-white shadow-md">
+      <div className="max-w-5xl mx-auto px-4 py-4">
+        <h1 className="text-2xl font-bold">
+          Student Productivity Hub
+        </h1>
+      </div>
     </nav>
   );
 }
-
-export default Navbar;

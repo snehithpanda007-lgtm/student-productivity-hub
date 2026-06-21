@@ -1,19 +1,7 @@
-function Footer() {
+export default function Footer() {
   return (
-    <footer
-      style={{
-        marginTop: "40px",
-        textAlign: "center",
-        padding: "20px",
-        background: "#f1f1f1",
-      }}
-    >
-      <p>
-        © 2026 Student Productivity
-        Hub
-      </p>
+    <footer className="mt-10 py-6 text-center text-gray-500">
+      © 2026 Student Productivity Hub
     </footer>
   );
 }
-
-export default Footer;

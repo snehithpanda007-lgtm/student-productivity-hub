@@ -1,15 +1,13 @@
-function Hero() {
+export default function Hero() {
   return (
-    <div
-      style={{
-        textAlign: "center",
-        padding: "20px",
-      }}
-    >
-      <h1>Stay Productive 🚀</h1>
-      <p>Manage your daily tasks efficiently.</p>
-    </div>
+    <section className="text-center py-10">
+      <h2 className="text-4xl font-bold text-gray-800 mb-3">
+        Stay Productive Every Day
+      </h2>
+
+      <p className="text-gray-600 text-lg">
+        Manage your college, coding, and personal tasks in one place.
+      </p>
+    </section>
   );
 }
-
-export default Hero;

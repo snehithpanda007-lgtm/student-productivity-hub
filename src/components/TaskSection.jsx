@@ -1,179 +1,130 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TaskCard from "./TaskCard";
 
-function TaskSection() {
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks =
-      localStorage.getItem("tasks");
+export default function TaskSection({
+  tasks,
+  addTask,
+  toggleTask,
+  deleteTask,
+}) {
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("College");
+  const [filter, setFilter] = useState("All");
+  const [CatFilter, setCatFilter] = useState("All")
 
-    return savedTasks
-      ? JSON.parse(savedTasks)
-      : [];
+  const filteredTasks = tasks.filter((task) => {
+    // Status filter
+    const statusMatch =
+      filter === "All"
+        ? true
+        : filter === "Completed"
+        ? task.completed
+        : !task.completed;
+
+    // Category filter
+    const categoryMatch =
+      CatFilter === "All"
+        ? true
+        : task.category === CatFilter;
+
+    return statusMatch && categoryMatch;
   });
 
-  const [title, setTitle] =
-    useState("");
-
-  const [category, setCategory] =
-    useState("College");
-
-  const [filter, setFilter] =
-    useState("All");
-
-  useEffect(() => {
-    localStorage.setItem(
-      "tasks",
-      JSON.stringify(tasks)
-    );
-  }, [tasks]);
-
-  const addTask = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!title.trim()) return;
 
-    const newTask = {
-      id: Date.now(),
-      title,
-      category,
-      completed: false,
-    };
+    addTask(title, category);
 
-    setTasks([...tasks, newTask]);
     setTitle("");
   };
 
-  const deleteTask = (id) => {
-    setTasks(
-      tasks.filter(
-        (task) => task.id !== id
-      )
-    );
-  };
-
-  const toggleTask = (id) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              completed:
-                !task.completed,
-            }
-          : task
-      )
-    );
-  };
-
-  const filteredTasks =
-    tasks.filter((task) => {
-      if (filter === "Completed")
-        return task.completed;
-
-      if (filter === "Pending")
-        return !task.completed;
-
-      return true;
-    });
-
   return (
-    <div
-      style={{
-        width: "80%",
-        margin: "auto",
-      }}
-    >
-      <h2>Task Manager</h2>
+    <section className="space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg p-4"
+      >
+        <div className="flex flex-col md:flex-row gap-3">
+          <input
+            type="text"
+            placeholder="Enter task..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="border p-2 rounded flex-1"
+          />
 
-      <form onSubmit={addTask}>
-        <input
-          type="text"
-          placeholder="Enter task"
-          value={title}
-          onChange={(e) =>
-            setTitle(e.target.value)
-          }
-        />
+          <select
+            value={category}
+            onChange={(e) =>
+              setCategory(e.target.value)
+            }
+            className="border p-2 rounded"
+          >
+            <option>College</option>
+            <option>Coding</option>
+            <option>Personal</option>
+          </select>
 
-        <select
-          value={category}
-          onChange={(e) =>
-            setCategory(
-              e.target.value
-            )
-          }
-        >
-          <option>
-            College
-          </option>
-          <option>
-            Coding
-          </option>
-          <option>
-            Personal
-          </option>
-        </select>
-
-        <button type="submit">
-          Add Task
-        </button>
+          <button
+            className="bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            Add Task
+          </button>
+        </div>
       </form>
 
-      <br />
-
-      <div>
+      <div className="flex gap-3">
         <button
-          onClick={() =>
-            setFilter("All")
-          }
+          onClick={() => setFilter("All")}
+          className="px-3 py-1 bg-gray-200 rounded"
         >
           All
         </button>
 
         <button
-          onClick={() =>
-            setFilter(
-              "Completed"
-            )
-          }
+          onClick={() => setFilter("Completed")}
+          className="px-3 py-1 bg-green-200 rounded"
         >
           Completed
         </button>
 
         <button
-          onClick={() =>
-            setFilter(
-              "Pending"
-            )
-          }
+          onClick={() => setFilter("Pending")}
+          className="px-3 py-1 bg-yellow-200 rounded"
         >
           Pending
         </button>
+
+        <select
+          value={CatFilter}
+          onChange={(e) => setCatFilter(e.target.value)}
+          className="px-3 py-1 bg-red-200 rounded"
+        >
+          <option value="All">All</option>
+          <option value="College">College</option>
+          <option value="Coding">Coding</option>
+          <option value="Personal">Personal</option>
+        </select>   
       </div>
 
-      <br />
-
-      {filteredTasks.length ===
-      0 ? (
-        <p>No tasks found.</p>
+      {filteredTasks.length === 0 ? (
+        <p className="text-center text-gray-500">
+          No tasks found.
+        </p>
       ) : (
-        filteredTasks.map(
-          (task) => (
+        <div className="space-y-3">
+          {filteredTasks.map((task) => (
             <TaskCard
               key={task.id}
               task={task}
-              onDelete={
-                deleteTask
-              }
-              onToggle={
-                toggleTask
-              }
+              toggleTask={toggleTask}
+              deleteTask={deleteTask}
             />
-          )
-        )
+          ))}
+        </div>
       )}
-    </div>
+    </section>
   );
 }
-
-export default TaskSection;
